@@ -30,4 +30,9 @@ jobs:
           pip install pandas boto3
 
       - name: Upload CSV
-        run: python s1.py
+        run: |
+          python s1.py \
+            --bucket retail-sales-demo-bucket-533267146744\
+            --file retail_sales_dataset.csv \
+            --key raw/retail_sales_dataset.csv \
+            --region us-east-1

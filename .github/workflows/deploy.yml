@@ -30,4 +30,4 @@ jobs:
           pip install pandas boto3
 
       - name: Upload CSV
-        run: python app/s1.py
+        run: python s1.py

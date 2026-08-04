@@ -33,8 +33,8 @@ Resources:
                   - s3:GetObject
                   - s3:ListBucket
                 Resource:
-                  - !Sub arn:aws:s3:::${YourBucketName}
-                  - !Sub arn:aws:s3:::${YourBucketName}/*
+                  - !Sub arn:aws:s3:::${BucketName}
+                  - !Sub arn:aws:s3:::${BucketName}/*
 
   MyCrawler:
     Type: AWS::Glue::Crawler
@@ -44,7 +44,7 @@ Resources:
       DatabaseName: !Ref GlueDatabase
       Targets:
         S3Targets:
-          - Path: !Sub s3://${YourBucketName}/raw/
+          - Path: !Sub s3://${BucketName}/raw/
       SchemaChangePolicy:
         UpdateBehavior: UPDATE_IN_DATABASE
         DeleteBehavior: LOG

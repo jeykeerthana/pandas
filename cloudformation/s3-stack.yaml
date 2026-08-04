@@ -1,1 +1,7 @@
+AWSTemplateFormatVersion: '2010-09-09'
 
+Resources:
+  RetailSalesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: retail-sales-demo-bucket-533267146744

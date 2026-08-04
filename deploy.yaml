@@ -1,0 +1,35 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::533267146744:role/GitHubOIDCRole
+          aws-region: us-east-1
+
+      - name: Deploy CloudFormation
+        run: |
+          aws cloudformation deploy \
+            --template-file cloudformation/s3-stack.yaml \
+            --stack-name retail-sales-stack
+
+      - name: Install Dependencies
+        run: pip install pandas boto3
+
+      - name: Upload CSV
+        run: python app/s1.py

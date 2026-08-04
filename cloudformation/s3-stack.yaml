@@ -1,9 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
+
 Resources:
+
   RetailSalesBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: retail-sales-demo-bucket-533267146744
+
   GlueDatabase:
     Type: AWS::Glue::Database
     Properties:
@@ -21,8 +24,10 @@ Resources:
             Principal:
               Service: glue.amazonaws.com
             Action: sts:AssumeRole
+
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+
       Policies:
         - PolicyName: S3ReadAccess
           PolicyDocument:
@@ -33,8 +38,8 @@ Resources:
                   - s3:GetObject
                   - s3:ListBucket
                 Resource:
-                  - !Sub arn:aws:s3:::${BucketName}
-                  - !Sub arn:aws:s3:::${BucketName}/*
+                  - !Sub arn:aws:s3:::${RetailSalesBucket}
+                  - !Sub arn:aws:s3:::${RetailSalesBucket}/*
 
   MyCrawler:
     Type: AWS::Glue::Crawler
@@ -42,9 +47,15 @@ Resources:
       Name: my-csv-crawler
       Role: !GetAtt GlueCrawlerRole.Arn
       DatabaseName: !Ref GlueDatabase
+
       Targets:
         S3Targets:
-          - Path: !Sub s3://${BucketName}/raw/
+          - Path: !Sub s3://${RetailSalesBucket}/raw/
+
       SchemaChangePolicy:
         UpdateBehavior: UPDATE_IN_DATABASE
         DeleteBehavior: LOG
+
+Outputs:
+  BucketName:
+    Value: !Ref RetailSalesBucket
